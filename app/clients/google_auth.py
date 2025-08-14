@@ -17,8 +17,8 @@ def load_credentials() -> Credentials:
     token_path = Path(settings.google_token_path).expanduser().resolve()
     cred_path  = Path(settings.google_credentials_path).expanduser().resolve()
 
-    logger.info(f"Using credentials at: {cred_path}")
-    logger.info(f"Token path: {token_path}")
+    #logger.info(f"Using credentials at: {cred_path}")
+    #logger.info(f"Token path: {token_path}")
 
     creds: Credentials | None = None
     if token_path.exists():
