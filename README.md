@@ -1,7 +1,7 @@
 # Project Agentic Teacher
 ## Structure
 
-
+```
 ├─ app/ \
 │  ├─ __init__.py \
 │  ├─ main.py                   # FastAPI app (simple health check for now) \
@@ -35,15 +35,16 @@
 │  │  ├─ provider.py \
 │  │  └─ openai_provider.py     # or vertex_provider.py later \
 │  └─ scripts/                  # small CLIs for development \
-│     ├─ __init__.py \
-│     ├─ auth_smoke.py \
-│     └─ list_assignments.py \
-├─ tests/ \
-│  └─ test_rubric_parser.py     # first unit test target \
-├─ .env.example \
-├─ .gitignore \
-├─ requirements.txt \
-└─ README.md \
+│     ├─ __init__.py
+│     ├─ auth_smoke.py
+│     └─ list_assignments.py
+├─ tests/
+│  └─ test_rubric_parser.py     # first unit test target
+├─ .env.example
+├─ .gitignore
+├─ requirements.txt
+└─ README.md
+```
 
 ## Setup
 First of all you need to check `requirements.txt` file and check the last version of the libraries.
