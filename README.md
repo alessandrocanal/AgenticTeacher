@@ -1,9 +1,9 @@
 # Project Agentic Teacher
 ## Structure
 
-├─ app/
-│  ├─ __init__.py
-│  ├─ main.py                   # FastAPI app (simple health check for now)
+├─ app/ \
+│  ├─ __init__.py \
+│  ├─ main.py                   # FastAPI app (simple health check for now) \
 │  ├─ config.py                 # env/config loading
 │  ├─ logging.py                # logger setup
 │  ├─ models/                   # pydantic models for rubric, feedback, submissions
