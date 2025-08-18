@@ -22,6 +22,7 @@
 │  ├─ services/                 # app logic (rubric loader, evaluator, feedback writer)
 │  │  ├─ __init__.py
 │  │  ├─ rubric_loader.py
+│  │  ├─ extraction.py
 │  │  ├─ evaluation.py
 │  │  ├─ feedback_writer.py
 │  │  └─ pipeline.py

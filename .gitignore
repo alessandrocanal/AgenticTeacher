@@ -8,3 +8,5 @@ app/__pycache__/
 app/clients/__pycache__/
 app/scripts/__pycache__/
 .idea/workspace.xml
+.artifacts/
+*.pyc
