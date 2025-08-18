@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <title>{{ title or "Revisione elaborati" }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Tailwind + HTMX via CDN for speed in dev -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+<header class="sticky top-0 z-40 border-b bg-white/80 backdrop-blur">
+  <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+    <a href="/start" class="text-xl font-semibold tracking-tight">
+      AgenticTeacher <span class="text-slate-400">·</span> Revisione
+    </a>
+
+    <!-- NAV -->
+    <nav class="text-sm text-slate-600 flex items-center gap-2">
+      <a href="/start"
+         class="inline-flex items-center gap-2 rounded-xl px-3 py-1.5 ring-1 transition
+                {% if request.url.path.startswith('/start') %} bg-slate-900 text-white ring-slate-900 {% else %} hover:bg-slate-100 ring-transparent hover:ring-slate-200 {% endif %}">
+        📚 Seleziona corso/compito
+      </a>
+
+      <a href="/health"
+         class="inline-flex items-center gap-2 rounded-xl px-3 py-1.5 hover:bg-slate-100 ring-1 ring-transparent hover:ring-slate-200 transition">
+        <span class="i">🩺</span> Health
+      </a>
+    </nav>
+  </div>
+</header>
+
+  <main class="max-w-5xl mx-auto px-4 py-6">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

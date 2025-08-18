@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% set title = "Dettaglio revisione" %}
+{% block content %}
+  <a href="/review/{{ course_id }}/{{ coursework_id }}" class="text-sm text-slate-600 hover:underline">&larr; Torna alla lista</a>
+
+  <div class="mt-3 grid gap-4 md:grid-cols-3">
+    <div class="md:col-span-2">
+      <div class="bg-white rounded-2xl shadow-sm p-4">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-lg font-semibold">{{ pe.student_full_name or pe.student_user_id or "Studente" }}</h2>
+          <div class="text-sm text-slate-600">
+            {% if pe.max_points %}Punteggio: <strong>{{ pe.total_points }}/{{ pe.max_points }}</strong>{% else %}&nbsp;{% endif %}
+          </div>
+        </div>
+
+        <form method="post" action="/review/{{ course_id }}/{{ coursework_id }}/{{ submission_id }}/save" class="space-y-6">
+          <div class="space-y-4">
+            {% for c in rubric.criteria %}
+            <div class="border rounded-xl p-3">
+              <div class="font-medium">{{ c.title }}</div>
+              {% if c.description %}<div class="text-sm text-slate-600">{{ c.description }}</div>{% endif %}
+              <div class="mt-2 grid gap-2">
+                {% for lv in c.levels %}
+                  {% set key = c.id or c.title %}
+                  <label class="flex items-start gap-2 p-2 rounded-lg border hover:bg-slate-50">
+                    <input type="radio" name="crit_{{ key }}" value="{{ lv.title }}"
+                           {% if selected.get(key) == lv.title %}checked{% endif %}/>
+                    <div>
+                      <div class="text-sm font-medium">{{ lv.title }}{% if lv.points is not none %} — {{ lv.points }} pt{% endif %}</div>
+                      {% if lv.descriptor %}<div class="text-xs text-slate-600">{{ lv.descriptor }}</div>{% endif %}
+                    </div>
+                  </label>
+                {% endfor %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-1">Commento complessivo (IT)</label>
+            <textarea name="overall_comment_it" rows="6"
+                      class="w-full rounded-xl border p-3"
+                      placeholder="Osservazioni e suggerimenti...">{{ pe.overall_comment_it }}</textarea>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button class="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700" type="submit">
+              Salva modifiche
+            </button>
+            <a href="/review/{{ course_id }}/{{ coursework_id }}" class="px-4 py-2 rounded-xl border">Chiudi</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <aside class="md:col-span-1 space-y-4">
+      <div class="bg-white rounded-2xl shadow-sm p-4">
+        <div class="text-sm text-slate-500">Dettagli</div>
+        <div class="mt-2 text-sm">
+          <div><span class="text-slate-500">Corso:</span> {{ course_id }}</div>
+          <div><span class="text-slate-500">Compito:</span> {{ coursework_id }}</div>
+          <div><span class="text-slate-500">Sottomissione:</span> {{ submission_id }}</div>
+        </div>
+      </div>
+      {% if pe.max_points %}
+      <div class="bg-white rounded-2xl shadow-sm p-4">
+        <div class="text-sm text-slate-500">Punteggio attuale</div>
+        <div class="text-2xl font-semibold">{{ pe.total_points }}/{{ pe.max_points }}</div>
+      </div>
+      {% endif %}
+    </aside>
+  </div>
+{% endblock %}

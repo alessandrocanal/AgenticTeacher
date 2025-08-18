@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% set title = "Seleziona corso e compito" %}
+{% block content %}
+  <div class="max-w-2xl">
+    <h2 class="text-xl font-semibold mb-4">Seleziona corso e compito</h2>
+
+    <form method="post" action="/start/go" class="space-y-6 bg-white p-4 rounded-2xl shadow-sm">
+
+      <!-- Course select -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Corso</label>
+        <select name="course_id" id="course_id"
+                class="w-full rounded-xl border p-3"
+                required
+                hx-get="/review/ajax/courseworks"
+                hx-target="#coursework_id"
+                hx-trigger="change"
+                hx-include="#course_id">
+          <option value="" selected disabled>Seleziona un corso…</option>
+          {% for c in courses %}
+            <option value="{{ c.id }}">{{ c.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Coursework select (populated by HTMX) -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Compito</label>
+        <select name="coursework_id" id="coursework_id"
+                class="w-full rounded-xl border p-3"
+                required>
+          <option value="" selected disabled>Seleziona prima un corso…</option>
+        </select>
+        <p class="text-xs text-slate-500 mt-1">Dopo aver scelto il corso, l’elenco dei compiti si aggiorna automaticamente.</p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button type="submit"
+                class="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700">
+          Vai alla revisione
+        </button>
+        <a href="/health" class="text-slate-600 hover:underline text-sm">Check server</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

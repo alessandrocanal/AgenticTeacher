@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% set title = "Revisione elaborati" %}
+{% block content %}
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-lg font-semibold">Corso {{ course_id }} · Compito {{ coursework_id }}</h2>
+    <form method="post" action="/review/{{ course_id }}/{{ coursework_id }}/ingest">
+      <button class="px-3 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700">
+        Ingest proposte
+      </button>
+    </form>
+  </div>
+
+  {% if proposals %}
+  <div class="overflow-hidden rounded-2xl shadow-sm bg-white">
+    <table class="min-w-full text-sm">
+      <thead class="bg-slate-100 text-slate-700">
+        <tr>
+          <th class="px-4 py-2 text-left">Studente</th>
+          <th class="px-4 py-2 text-left">Punteggio</th>
+          <th class="px-4 py-2 text-left">Azioni</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for p in proposals %}
+        <tr class="border-t">
+          <td class="px-4 py-2">{{ p.student_full_name or p.student_user_id or "Studente" }}</td>
+          <td class="px-4 py-2">
+            {% if p.max_points %}
+              {{ p.total_points }}/{{ p.max_points }}
+            {% else %}
+              — 
+            {% endif %}
+          </td>
+          <td class="px-4 py-2">
+            <a class="px-3 py-1 rounded-lg bg-slate-800 text-white hover:bg-black"
+               href="/review/{{ course_id }}/{{ coursework_id }}/{{ p.submission_id }}">
+              Apri
+            </a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <div class="rounded-2xl border border-dashed p-8 text-center text-slate-600 bg-white">
+      Nessuna proposta ancora. Clicca <strong>Ingest proposte</strong> per generarle.
+    </div>
+  {% endif %}
+{% endblock %}
