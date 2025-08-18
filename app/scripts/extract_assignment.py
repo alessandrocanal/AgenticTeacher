@@ -2,7 +2,7 @@ from loguru import logger
 from app.services.extraction import build_submission_bundles
 
 COURSE_ID = "***"
-COURSEWORK_ID = "***" 
+COURSEWORK_ID = "***"
 
 def main():
     bundles = build_submission_bundles(COURSE_ID, COURSEWORK_ID)

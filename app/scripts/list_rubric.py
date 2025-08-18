@@ -2,8 +2,8 @@ from loguru import logger
 from app.services.rubric_loader import load_rubric_from_classroom
 
 def main():
-    COURSE_ID = "789297213544"       # pick an assignment that has a rubric
-    COURSEWORK_ID = "798836974753"
+    COURSE_ID = "***"       # pick an assignment that has a rubric
+    COURSEWORK_ID = "***"
 
     rb = load_rubric_from_classroom(course_id=COURSE_ID, coursework_id=COURSEWORK_ID)
     if not rb:
