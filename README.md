@@ -7,40 +7,40 @@
 │  ├─ main.py                   # FastAPI app (simple health check for now)
 │  ├─ config.py                 # env/config loading
 │  ├─ logging.py                # logger setup
-│  ├─ models/                   # pydantic models for rubric, feedback, submissions
-│  │  ├─ __init__.py
-│  │  ├─ rubric.py
-│  │  ├─ submission.py
-│  │  └─ feedback.py
 │  ├─ clients/                  # thin wrappers around Google APIs
 │  │  ├─ __init__.py
 │  │  ├─ google_auth.py
 │  │  ├─ classroom.py
 │  │  ├─ drive.py
-│  │  ├─ docs.py
-│  │  └─ sheets.py
-│  ├─ services/                 # app logic (rubric loader, evaluator, feedback writer)
-│  │  ├─ __init__.py
-│  │  ├─ rubric_loader.py
-│  │  ├─ extraction.py
-│  │  ├─ evaluation.py
-│  │  ├─ feedback_writer.py
-│  │  └─ pipeline.py
-│  ├─ repositories/             # persistence (swap memory → Postgres later)
-│  │  ├─ __init__.py
-│  │  ├─ results_repo.py        # interface
-│  │  ├─ memory_repo.py
-│  │  └─ postgres_repo.py       # (later)
+│  │  ├─ docs.py                # TODO
+│  │  └─ sheets.py              # TODO
 │  ├─ llm/                      # pluggable LLM provider(s)
 │  │  ├─ __init__.py
 │  │  ├─ provider.py
-│  │  └─ openai_provider.py     # or vertex_provider.py later
-│  └─ scripts/                  # small CLIs for development
+│  │  └─ openai_compat_provider.py     
+│  ├─ models/                   # pydantic models for rubric, feedback, submissions
+│  │  ├─ __init__.py
+│  │  ├─ rubric.py
+│  │  ├─ submission.py
+│  │  └─ feedback.py
+│  ├─ repositories/             # persistence (swap memory → Postgres later)
+│  │  ├─ __init__.py
+│  │  ├─ results_repo.py        # interface
+│  │  └─ postgres_repo.py       # TODO
+│  ├─ scripts/                  # small CLIs for development
+│  │  ├─ __init__.py
+│  │  ├─ auth_smoke.py
+│  │  ├─ evaluate_assignment.py
+│  │  ├─ extract_assignment.py
+│  │  └─ list_rubric.py
+│  └─ services/                 # app logic (rubric loader, evaluator, feedback writer)
 │     ├─ __init__.py
-│     ├─ auth_smoke.py
-│     └─ list_assignments.py
-├─ tests/
-│  └─ test_rubric_parser.py     # first unit test target
+│     ├─ rubric_loader.py
+│     ├─ extraction.py
+│     ├─ evaluation.py
+│     ├─ feedback_writer.py     # TODO
+│     └─ prompting.py
+├─ tests/                       # TODO
 ├─ .env.example
 ├─ .gitignore
 ├─ requirements.txt
@@ -87,5 +87,19 @@ From the navigation menu, go to **APIs and Services -> Credentials**.
 A pop-up will appear with your Client ID and Client Secret. These are the credentials for your desktop application. \
 **It's better that you download the json file right now**, rename it into `credentials.json` and upload it into the root folder of your app.
 
+### Start the GUI
+`uvicorn app.main:app --reload --port 8000`
+
+### ML studio integration
+To avoid privacy issue it's better to have your GPT locally, so one possible solution is to download [ML Studio](https://lmstudio.ai) so you can run your favorite model on your computer. \
+After the download you need to choose a model according to your computer resources and download it in *My Model* section; then you can start the app in *Developer* section. \
+After that you must config the interaction in `.env` file: \
+`LLM_PROVIDER=openai_compat`\
+`OPENAI_BASE_URL=http://localhost:1234/v1` \
+`OPENAI_MODEL=llama3.1-8b-instruct`\
+`OPENAI_API_KEY=lm-studio` 
+
+where `llama3.1-8b-instruct` is the model I choose and `lm-studio` is a placeholder. \
+You can exploit the same env variables to configure an interaction via API
 
 
