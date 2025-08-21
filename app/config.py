@@ -49,9 +49,18 @@ class Settings(BaseSettings):
         # Fallback: comma-separated
         return [item.strip() for item in s.split(",") if item.strip()]
 
+    # --- LLM (local) ---
+    llm_provider: str = Field(default="stub", alias="LLM_PROVIDER")  # stub | openai_compat
+    # OpenAI-compatible (LM Studio / llama-cpp / vLLM)
+    openai_base_url: str = Field(default="http://127.0.0.1:1234/v1", alias="OPENAI_BASE_URL")
+    openai_model: str = Field(default="llama3.1-8b-instruct", alias="OPENAI_MODEL")
+    openai_api_key: str = Field(default="lm-studio", alias="OPENAI_API_KEY")
+
     model_config = {
         "env_file": ".env",
         "case_sensitive": False,
+        # IMPORTANT: avoid crashes when you add unrelated env vars
+        "extra": "ignore",
     }
 
 settings = Settings()

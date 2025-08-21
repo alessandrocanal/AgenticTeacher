@@ -7,7 +7,7 @@ from app.repositories.results_repo import memory_results_repo
 from app.llm.provider import LLMStub  # swap with your real provider later
 
 COURSE_ID = "***"
-COURSEWORK_ID = "***" 
+COURSEWORK_ID = "***"
 
 def main():
     rb = load_rubric_from_classroom(COURSE_ID, COURSEWORK_ID)

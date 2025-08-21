@@ -47,8 +47,23 @@
             <button class="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700" type="submit">
               Salva modifiche
             </button>
-            <a href="/review/{{ course_id }}/{{ coursework_id }}" class="px-4 py-2 rounded-xl border">Chiudi</a>
+
+            <a href="/review/{{ course_id }}/{{ coursework_id }}" class="px-4 py-2 rounded-xl border">
+              Chiudi
+            </a>
+
+            <!-- Regenerate via LLM: posts to /regen instead of /save -->
+            <button
+              class="px-3 py-2 rounded-xl bg-slate-800 text-white hover:bg-black"
+              type="submit"
+              formaction="/review/{{ course_id }}/{{ coursework_id }}/{{ submission_id }}/regen"
+              formmethod="post"
+              formnovalidate
+            >
+              Rigenera commento (LLM locale)
+            </button>
           </div>
+
         </form>
       </div>
     </div>
@@ -59,7 +74,7 @@
         <div class="mt-2 text-sm">
           <div><span class="text-slate-500">Corso:</span> {{ course_id }}</div>
           <div><span class="text-slate-500">Compito:</span> {{ coursework_id }}</div>
-          <div><span class="text-slate-500">Sottomissione:</span> {{ submission_id }}</div>
+          <div><span class="text-slate-500">Lavoro:</span> {{ submission_id }}</div>
         </div>
       </div>
       {% if pe.max_points %}

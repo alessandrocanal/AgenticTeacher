@@ -8,6 +8,9 @@ from app.repositories.results_repo import memory_results_repo
 from app.services.rubric_loader import load_rubric_from_classroom
 from app.services.extraction import build_submission_bundles
 from app.services.evaluation import assess_with_rubric
+from app.services.evaluation import compute_metrics
+from app.services.prompting import build_llm_context
+from app.llm.openai_compat_provider import OpenAICompatProvider
 from app.llm.provider import LLMStub
 
 templates = Jinja2Templates(directory="app/ui/templates")
@@ -162,3 +165,34 @@ async def review_save(request: Request, course_id: str, coursework_id: str, subm
 
     memory_results_repo.save(pe)
     return RedirectResponse(url=f"/review/{course_id}/{coursework_id}/{submission_id}", status_code=303)
+
+@router.post("/review/{course_id}/{coursework_id}/{submission_id}/regen")
+async def review_regen(course_id: str, coursework_id: str, submission_id: str):
+    pe = _get_proposal(course_id, coursework_id, submission_id)
+    if not pe:
+        raise HTTPException(404, "Proposta non trovata. Esegui prima l’ingest.")
+    # Rebuild a minimal bundle-like view for metrics/snippets:
+    # We didn't store the bundle; re-extract metrics from artifacts if needed.
+    # Easiest: Re-run extraction for this single submission. If you prefer, cache bundles in memory.
+    from app.services.extraction import build_submission_bundles
+    bundles = build_submission_bundles(course_id, coursework_id)
+    bundle = next((b for b in bundles if b.submission_id == submission_id), None)
+    if not bundle:
+        raise HTTPException(404, "Lavoro non trovata.")
+    # Load rubric
+    from app.services.rubric_loader import load_rubric_from_classroom
+    rubric = load_rubric_from_classroom(course_id, coursework_id)
+    if not rubric:
+        raise HTTPException(400, "Rubrica non disponibile.")
+    # Metrics + prompt
+    met = compute_metrics(bundle)
+    ctx = build_llm_context(rubric, bundle, pe.criteria, met)
+    # Provider (LM Studio)
+    try:
+        llm = OpenAICompatProvider()
+    except Exception:
+        llm = LLMStub()
+    pe.overall_comment_it = llm.draft_feedback_it(ctx)
+    memory_results_repo.save(pe)
+    return RedirectResponse(url=f"/review/{course_id}/{coursework_id}/{submission_id}", status_code=303)
+
